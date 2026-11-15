@@ -160,6 +160,8 @@
       return node;
     }
 
+    // URL do backend. Vazio = mesmo servidor (uso local).
+    const API_BASE = "https://SEU-BACKEND.onrender.com";
     async function api(path, options = {}) {
       const response = await fetch(path, options);
       if (!response.ok) {
