@@ -161,7 +161,7 @@
     }
 
     // URL do backend. Vazio = mesmo servidor (uso local).
-    const API_BASE = "https://SEU-BACKEND.onrender.com";
+    const API_BASE = "";
     async function api(path, options = {}) {
       const response = await fetch(API_BASE + path, options);
       if (!response.ok) {
