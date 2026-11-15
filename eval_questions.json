@@ -1,0 +1,15 @@
+[
+  {"question": "Qual é o horário de entrada flexível?", "page": 1},
+  {"question": "Quantos dias de férias eu tenho direito?", "page": 2},
+  {"question": "Com quanta antecedência devo solicitar as férias?", "page": 2},
+  {"question": "Quanto tempo dura a licença-paternidade?", "page": 2},
+  {"question": "Quantos dias por semana preciso ir ao escritório?", "page": 3},
+  {"question": "Qual o valor do auxílio internet?", "page": 3},
+  {"question": "Preciso usar VPN para trabalhar de casa?", "page": 3},
+  {"question": "Qual o valor do vale-refeição por dia?", "page": 4},
+  {"question": "Qual o limite do auxílio-educação?", "page": 4},
+  {"question": "Em quanto tempo sai o reembolso de despesas?", "page": 4},
+  {"question": "Em quanto tempo devo reportar um incidente de segurança?", "page": 5},
+  {"question": "Qual o limite para aceitar presentes de fornecedores?", "page": 5},
+  {"question": "Quantos caracteres a senha precisa ter?", "page": 5}
+]

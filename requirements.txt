@@ -1,0 +1,3 @@
+# Instalação "tudo incluso" (equivale a: pip install -e ".[all]").
+# Para rodar sem baixar modelos nem chamar APIs, veja o modo offline no README.
+-e .[all]
