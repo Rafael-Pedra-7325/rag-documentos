@@ -152,14 +152,6 @@ def create_app(service: RAGService | None = None) -> FastAPI:
         description="Pergunte aos seus PDFs: busca vetorial + LLM, citando a página de origem.",
         lifespan=_lifespan,
     )
-        allowed_origins = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
-    if allowed_origins:
-        app.add_middleware(
-            CORSMiddleware,
-            allow_origins=allowed_origins,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
     if service is not None:
         app.state.service = service
     app.include_router(router)
