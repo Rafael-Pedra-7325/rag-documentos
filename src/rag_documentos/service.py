@@ -147,7 +147,10 @@ class RAGService:
         if not question:
             raise ValueError("A pergunta não pode ser vazia.")
 
-        k = top_k or self.settings.top_k
+        k = top_k if top_k is not None else self.settings.top_k
+        if k < 1:
+            raise ValueError("top_k deve ser pelo menos 1.")
+
         hits = self.store.search(self.embedder.embed_query(question), k, doc_ids)
         hits = [h for h in hits if h.score >= self.settings.min_score]
         if not hits:
@@ -158,7 +161,7 @@ class RAGService:
             for i, h in enumerate(hits, start=1)
         ]
         text = self.llm.generate(question, passages)
-        cited = cited_refs(text)
+        cited = {r for r in cited_refs(text) if 1 <= r <= len(hits)}
         sources = [
             Source(
                 ref=i,
