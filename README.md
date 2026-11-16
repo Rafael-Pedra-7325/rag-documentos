@@ -1,3 +1,12 @@
+---
+title: RAG Documentos
+emoji: 📄
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 8000
+---
+
 # 📄 RAG Documentos
 
 > Pergunte aos seus PDFs e veja **de qual arquivo e página** veio cada resposta.
