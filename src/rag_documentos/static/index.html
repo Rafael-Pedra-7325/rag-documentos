@@ -231,8 +231,12 @@
         body.append("file", file);
         try {
           const result = await api("/api/documents", { method: "POST", body });
+          const verb = result.replaced ? "atualizado" : "indexado";
           const extra = result.warnings.length ? " · " + result.warnings.join(" ") : "";
-          setStatus(`✓ ${result.document.filename}: ${result.document.chunks} trechos${extra}`, "ok");
+          setStatus(
+            `✓ ${result.document.filename} (${verb}): ${result.document.chunks} trechos${extra}`,
+            "ok"
+          );
         } catch (error) {
           setStatus(`✗ ${file.name}: ${error.message}`, "error");
         }
