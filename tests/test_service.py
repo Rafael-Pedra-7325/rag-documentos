@@ -60,12 +60,18 @@ def test_blank_question_is_rejected(service):
         service.ask("   ")
 
 
+def test_invalid_top_k_is_rejected(service):
+    with pytest.raises(ValueError):
+        service.ask("Qualquer coisa?", top_k=0)
+
+
 def test_filtering_by_document(service):
     one = service.ingest_pdf(make_pdf(["Documento um fala sobre férias e descanso."]), "um.pdf")
     two = service.ingest_pdf(make_pdf(["Documento dois fala sobre férias e viagens."]), "dois.pdf")
     answer = service.ask("férias", doc_ids=[two.document.doc_id])
     assert {s.doc_id for s in answer.sources} == {two.document.doc_id}
     assert one.document.doc_id != two.document.doc_id
+    assert service.ask("férias", doc_ids=[]).sources == []
 
 
 def test_warns_about_pages_without_text(service):
@@ -86,7 +92,7 @@ def test_sources_are_marked_as_cited_when_the_llm_cites_them(service, sample_pdf
         name = "fake"
 
         def generate(self, question: str, passages: list[Passage]) -> str:
-            return f"Resposta baseada no primeiro trecho [{passages[0].ref}]."
+            return f"Resposta baseada no primeiro trecho [{passages[0].ref}] e [99]."
 
     service.llm = CitingLLM()
     service.ingest_pdf(sample_pdf, "manual.pdf")
