@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 DEFAULT_LLM_MODELS = {
-    "anthropic": "claude-haiku-5-5",
+    "anthropic": "claude-haiku-4-5",
     "openai": "gpt-4o-mini",
     "extractive": "extractive",
 }
