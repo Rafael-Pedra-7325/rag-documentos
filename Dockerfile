@@ -13,11 +13,11 @@ RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
 
 COPY pyproject.toml README.md ./
 COPY src ./src
+COPY examples ./examples
 RUN pip install ".[all]"
 
 RUN useradd --create-home app && mkdir -p /app/data && chown -R app:app /app
 USER app
-VOLUME ["/app/data"]
 EXPOSE 8000
 
 CMD ["uvicorn", "rag_documentos.api:app", "--host", "0.0.0.0", "--port", "8000"]
