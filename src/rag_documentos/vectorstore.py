@@ -105,12 +105,17 @@ class NumpyStore:
         with self._lock:
             if not self._chunks or k <= 0:
                 return []
+            if doc_ids is not None:
+                allowed = set(doc_ids)
+                if not allowed:
+                    return []
+            else:
+                allowed = None
             query = l2_normalize(np.asarray(vector, dtype=np.float32).reshape(-1))
             if query.shape[0] != self._vectors.shape[1]:
                 raise ValueError("query dimension differs from the stored vectors")
             scores = self._vectors @ query
-            if doc_ids:
-                allowed = set(doc_ids)
+            if allowed is not None:
                 mask = np.fromiter(
                     (c.doc_id in allowed for c in self._chunks),
                     dtype=bool,
@@ -187,11 +192,23 @@ class ChromaStore:
         total = self._collection.count()
         if total == 0 or k <= 0:
             return []
+        if doc_ids is not None:
+            allowed = list(dict.fromkeys(doc_ids))
+            if not allowed:
+                return []
+            where: dict | None = {"doc_id": {"$in": allowed}}
+            matching = len(self._collection.get(where=where, include=[])["ids"])
+            if matching == 0:
+                return []
+            n_results = min(k, matching)
+        else:
+            where = None
+            n_results = min(k, total)
+
         query = l2_normalize(np.asarray(vector, dtype=np.float32).reshape(-1))
-        where = {"doc_id": {"$in": list(doc_ids)}} if doc_ids else None
         result = self._collection.query(
             query_embeddings=[query.tolist()],
-            n_results=min(k, total),
+            n_results=n_results,
             where=where,
             include=["documents", "metadatas", "distances"],
         )
