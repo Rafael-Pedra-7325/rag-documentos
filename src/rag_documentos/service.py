@@ -110,14 +110,27 @@ class RAGService:
             size_bytes=len(data),
             uploaded_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         )
+        evicted: list[str] = []
         with self._write_lock:
             replaced = self.registry.get(doc_id) is not None
             if replaced:
                 self.store.delete_document(doc_id)
+            elif self.settings.max_documents > 0:
+                existing = self.registry.list()
+                while len(existing) >= self.settings.max_documents:
+                    oldest = existing.pop()
+                    self.store.delete_document(oldest.doc_id)
+                    self.registry.remove(oldest.doc_id)
+                    evicted.append(oldest.filename)
             self.store.add(stored, vectors)
             self.registry.put(info)
 
         warnings: list[str] = []
+        if evicted:
+            warnings.append(
+                f"Limite de {self.settings.max_documents} documento(s) atingido; "
+                f"removido(s): {', '.join(evicted)}."
+            )
         if parsed.empty_pages:
             shown = ", ".join(str(n) for n in parsed.empty_pages[:10])
             more = "…" if len(parsed.empty_pages) > 10 else ""
