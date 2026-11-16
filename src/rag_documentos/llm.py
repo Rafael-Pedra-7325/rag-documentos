@@ -116,6 +116,7 @@ class OpenAICompatibleLLM:
         try:
             response = self._client.chat.completions.create(
                 model=self.name,
+                max_tokens=self._max_tokens,
                 messages=[
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": build_user_prompt(question, passages)},
