@@ -18,6 +18,7 @@ from .pdf import PDFError
 from .service import RAGService
 
 STATIC_DIR = Path(__file__).parent / "static"
+SAMPLE_PDF = Path(__file__).resolve().parents[2] / "examples" / "manual-colaborador.pdf"
 
 
 # --------------------------------------------------------------------------- schemas
@@ -140,7 +141,11 @@ def query(body: QueryRequest, service: ServiceDep) -> dict:
 @asynccontextmanager
 async def _lifespan(app: FastAPI):
     if getattr(app.state, "service", None) is None:
-        app.state.service = RAGService.from_settings(Settings.from_env())
+        settings = Settings.from_env()
+        service = RAGService.from_settings(settings)
+        if settings.seed_sample_pdf and not service.list_documents() and SAMPLE_PDF.exists():
+            service.ingest_pdf(SAMPLE_PDF.read_bytes(), SAMPLE_PDF.name)
+        app.state.service = service
     yield
 
 
