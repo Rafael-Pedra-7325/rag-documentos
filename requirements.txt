@@ -1,3 +1,3 @@
-# Instalação "tudo incluso" (equivale a: pip install -e ".[all]").
-# Para rodar sem baixar modelos nem chamar APIs, veja o modo offline no README.
--e .[all]
+# Instala apenas a base + cliente OpenAI (ideal para hospedagem gratuita de 512 MB de RAM).
+# Para instalar também sentence-transformers, chromadb e anthropic, use: pip install -e ".[all]"
+-e .[openai]
