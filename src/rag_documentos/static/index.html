@@ -62,7 +62,7 @@
 
     main { display: flex; flex-direction: column; min-height: 0; }
     #messages { flex: 1; overflow-y: auto; padding: 28px clamp(16px, 6vw, 80px); display: flex; flex-direction: column; gap: 18px; }
-    .hero { margin: auto; max-width: 520px; text-align: center; color: var(--muted); }
+    .hero { margin: auto; max-width: 560px; text-align: center; color: var(--muted); }
     .hero h2 { color: var(--text); margin: 0 0 8px; font-size: 22px; letter-spacing: -0.01em; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
     .chip {
@@ -313,12 +313,17 @@
     }
 
     function showHero() {
-      const examples = ["Quais são os principais pontos do documento?", "Resuma o primeiro capítulo", "O que o texto diz sobre prazos?"];
+      const examples = [
+        "Quantos dias de férias eu tenho direito?",
+        "Preciso usar VPN para trabalhar de casa?",
+        "Qual o limite do auxílio-educação?",
+        "Qual o valor do vale-refeição por dia?",
+      ];
       $("#messages").append(el("div", { class: "hero" },
         el("h2", {}, "O que você quer saber?"),
-        el("p", {}, "Envie um ou mais PDFs na barra lateral e faça perguntas em linguagem natural. Cada resposta mostra o arquivo e a página de onde veio."),
+        el("p", {}, "Teste agora com o manual já indexado ou envie seus próprios PDFs na barra lateral. Cada resposta cita o arquivo e a página exata."),
         el("div", { class: "chips" }, examples.map((text) =>
-          el("button", { class: "chip", type: "button", onclick: () => { $("#question").value = text; $("#question").focus(); } }, text)))));
+          el("button", { class: "chip", type: "button", onclick: () => ask(text) }, text)))));
     }
 
     /* ----------------------------------------------------------- wiring */
