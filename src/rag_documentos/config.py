@@ -35,6 +35,17 @@ def _env_float(name: str, default: float) -> float:
         raise ValueError(f"{name} must be a number, got {raw!r}") from exc
 
 
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.getenv(name, "").strip().lower()
+    if not raw:
+        return default
+    if raw in {"1", "true", "yes", "on"}:
+        return True
+    if raw in {"0", "false", "no", "off"}:
+        return False
+    raise ValueError(f"{name} must be a boolean (true/false), got {raw!r}")
+
+
 @dataclass(frozen=True)
 class Settings:
     """All tunable knobs of the application."""
@@ -51,6 +62,8 @@ class Settings:
     top_k: int = 5
     min_score: float = 0.0
     max_upload_mb: int = 25
+    max_documents: int = 0
+    seed_sample_pdf: bool = True
 
     def __post_init__(self) -> None:
         if self.embedding_backend not in EMBEDDING_BACKENDS:
@@ -65,6 +78,8 @@ class Settings:
             raise ValueError("CHUNK_OVERLAP must be >= 0 and smaller than CHUNK_SIZE")
         if self.top_k < 1:
             raise ValueError("TOP_K must be at least 1")
+        if self.max_documents < 0:
+            raise ValueError("MAX_DOCUMENTS must be >= 0")
 
     @property
     def chroma_dir(self) -> Path:
@@ -112,4 +127,6 @@ class Settings:
             top_k=_env_int("TOP_K", cls.top_k),
             min_score=_env_float("MIN_SCORE", cls.min_score),
             max_upload_mb=_env_int("MAX_UPLOAD_MB", cls.max_upload_mb),
+            max_documents=_env_int("MAX_DOCUMENTS", cls.max_documents),
+            seed_sample_pdf=_env_bool("SEED_SAMPLE_PDF", cls.seed_sample_pdf),
         )
