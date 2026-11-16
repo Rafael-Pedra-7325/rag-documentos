@@ -115,7 +115,7 @@ Tudo é configurado por variáveis de ambiente (ou `.env`). Nenhuma é obrigató
 | Variável | Padrão | Descrição |
 | --- | --- | --- |
 | `LLM_PROVIDER` | automático | `anthropic`, `openai` ou `extractive`. Se vazio, usa a chave disponível; sem chave, `extractive`. |
-| `LLM_MODEL` | `claude-haiku-5-5` / `gpt-4o-mini` | Modelo do provedor escolhido. |
+| `LLM_MODEL` | `claude-haiku-4-5` / `gpt-4o-mini` | Modelo do provedor escolhido. |
 | `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` | vazio | Credenciais. |
 | `OPENAI_BASE_URL` | vazio | URL de servidor compatível (ex.: `http://localhost:11434/v1` para Ollama). |
 | `EMBEDDING_BACKEND` | `sentence-transformers` | Ou `hashing` (offline, lexical). |
@@ -163,7 +163,7 @@ Formato da resposta (exemplo ilustrativo):
       "cited": true
     }
   ],
-  "model": "claude-haiku-5-5"
+  "model": "claude-haiku-4-5"
 }
 ```
 
